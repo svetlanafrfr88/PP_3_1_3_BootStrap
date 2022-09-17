@@ -9,11 +9,9 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
-
-@SuppressWarnings("ALL")
+@Entity
 @Data
 @AllArgsConstructor
-@Entity
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -86,6 +84,10 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
 

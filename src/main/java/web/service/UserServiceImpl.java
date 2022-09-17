@@ -8,7 +8,6 @@ import web.repository.RoleRepository;
 import web.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +40,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+
     @Override
     @Transactional
     public void deleteUser(long id) {
         userRepository.deleteById(id);
-
     }
-
 
     @Override
     public User getUserByEmail(String email) {
@@ -59,16 +57,9 @@ public class UserServiceImpl implements UserService {
         return roleRepository.findAll();
     }
 
-
     @Override
     public Role getRoleById(long id) {
         return roleRepository.getRoleById(id);
     }
-
-    @Override
-    public List<Role> getAllRolesFromUser(long id) {
-        return new ArrayList<>(userRepository.getOne(id).getRoles());
-    }
-
 
 }

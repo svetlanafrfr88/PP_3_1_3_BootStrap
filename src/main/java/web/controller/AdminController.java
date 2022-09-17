@@ -10,7 +10,7 @@ import web.model.Role;
 import web.model.User;
 import web.service.UserService;
 
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,9 +28,12 @@ public class AdminController {
     }
 
     @GetMapping("userList")
-    public String showAllUsers(Model model) {
-        List<User> userList = userService.getAllUsers();
-        model.addAttribute("users", userList);
+    public String showAllUsers(Model model, Principal principal) {
+        model.addAttribute("users", userService.getAllUsers());
+        User user = userService.getUserByEmail(principal.getName());
+        model.addAttribute("userInfo", user);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", userService.getAllRoles());
         return "all-users";
     }
 
@@ -38,14 +41,12 @@ public class AdminController {
     public String addNewUser(Model model) {
         User user = new User();
         List<Role> roleList = userService.getAllRoles();
-        List<Role> listOfUserRoles = new ArrayList<>();
         model.addAttribute("newUser", user);
         model.addAttribute("roles", roleList);
-        model.addAttribute("userroles", listOfUserRoles);
         return "user-info";
     }
 
-    @RequestMapping(value = "saveUser", method = RequestMethod.POST)
+    @PostMapping(value = "saveUser")
     public String saveUser(@ModelAttribute("newUser") User user, @RequestParam(value = "role", required = false) String[] role) {
         Set<Role> roleSet = new HashSet<>();
         for (String roles : role) {
@@ -60,17 +61,34 @@ public class AdminController {
         return "redirect:/admin/userList";
     }
 
-    @GetMapping("updateUser/{id}")
-    public String updateUser(@PathVariable("id") long id, Model model) {
-        List<Role> list = userService.getAllRoles();
-        List<Role> listOfUserRoles = userService.getAllRolesFromUser(id);
-        model.addAttribute("newUser", userService.getUser(id));
-        model.addAttribute("roles", list);
-        model.addAttribute("userroles", listOfUserRoles);
-        return "user-info";
+    @PostMapping(value = "updateUser")
+    public String updateUser(@ModelAttribute User userEdit, @RequestParam(value = "role", required = false) String[] role,
+                             @RequestParam(value = "id", required = false) Long id,
+                             @RequestParam(value = "lastname", required = false) String lastname,
+                             @RequestParam(value = "password", required = false) String password,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam(value = "age", required = false) Integer age,
+                             @RequestParam(value = "firstname", required = false) String firstname) {
+        Set<Role> roleSet = new HashSet<>();
+        for (String roles : role) {
+            roleSet.add(userService.getRoleById(Long.parseLong(roles)));
+        }
+        userEdit.setRoles(roleSet);
+        userEdit.setId(id);
+        userEdit.setFirstname(firstname);
+        userEdit.setLastname(lastname);
+        userEdit.setPassword(password);
+        userEdit.setAge(age);
+        userEdit.setEmail(email);
+        if (userEdit.getId() == null) {
+            userEdit.setPassword(passwordEncoder().encode(userEdit.getPassword()));
+            userService.saveUser(userEdit);
+        }
+        userService.saveUser(userEdit);
+        return "redirect:/admin/userList";
     }
 
-    @GetMapping("deleteUser/{id}")
+    @PostMapping("deleteUser/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
         return "redirect:/admin/userList";

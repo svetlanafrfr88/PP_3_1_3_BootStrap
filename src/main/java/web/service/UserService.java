@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
+
     User getUserByEmail(String email);
 
     List<User> getAllUsers();
@@ -20,8 +21,4 @@ public interface UserService {
     List<Role> getAllRoles();
 
     Role getRoleById(long id);
-
-    List<Role> getAllRolesFromUser(long id);
-
-
 }
