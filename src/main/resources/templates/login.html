@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <p style="color: blueviolet" th:if="${param.error}">
+        Wrong e-mail or password! Please check e-mail or password you entered and try again.
+    </p>
+    <form method="post" action="/login">
+
+        <label>Name:
+            <input name="j_username"/>
+        </label>
+        <br>
+        <br>
+        <label>Password:
+            <input type="password" name="j_password" />
+        </label>
+        <br>
+        <br>
+        <input type="submit" value="Log in">
+    </form>
+</div>
+</body>
+</html>
