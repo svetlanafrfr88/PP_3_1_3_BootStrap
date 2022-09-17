@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>All Users</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+
+<body>
+<h3>List of users</h3>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+        <th>E-mail</th>
+        <th>Operations</th>
+        <th>Roles</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:utext="${user.firstname}"></td>
+        <td th:utext="${user.lastname}"></td>
+        <td th:utext="${user.age}"></td>
+        <td th:utext="${user.email}"></td>
+        <td>
+            <button th:onclick="|window.location.href='@{/admin/updateUser/{id}(id=${user.id})}'|">
+                Update
+            </button>
+            <button th:onclick="|window.location.href='@{/admin/deleteUser/{id}(id=${user.id})}'|">
+                Delete
+            </button>
+        </td>
+        <td>
+            <span th:each="role : ${user.roles}" th:text="|${role.role} |"></span>
+        </td>
+    </tr>
+</table>
+
+<br>
+<input type="button" value="Add"
+       onclick="window.location.href = 'addNewUser'"/>
+<br>
+<br>
+<button th:onclick="|window.location.href='@{/logout}'|">Logout</button>
+</body>
+</html>

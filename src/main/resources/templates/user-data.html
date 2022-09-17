@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:Age="http://www.w3.org/1999/xhtml">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h3>
+    <p th:text="'Hello, ' + ${userInfo.firstname}  + '!'"></p>
+</h3>
+<hr>
+<br>
+<p th:text="${message} + '.'"></p>
+<br>
+<hr>
+<p th:text="'Name: ' + ${userInfo.firstname}"></p>
+<p th:text="'Surname: ' + ${userInfo.lastname}"></p>
+<p th:text="'Age: ' + ${userInfo.age}"></p>
+<p th:text="'E-mail: ' + ${userInfo.email}"></p>
+<hr>
+<br>
+<button th:onclick="|window.location.href='@{/logout}'|">Logout</button>
+</body>
+</html>
