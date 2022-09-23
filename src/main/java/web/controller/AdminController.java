@@ -62,7 +62,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "updateUser")
-    public String updateUser(@ModelAttribute User userEdit, @RequestParam(value = "role", required = false) String[] role,
+    public String updateUser(@ModelAttribute User user, @RequestParam(value = "role", required = false) String[] role,
                              @RequestParam(value = "id", required = false) Long id,
                              @RequestParam(value = "lastname", required = false) String lastname,
                              @RequestParam(value = "password", required = false) String password,
@@ -73,18 +73,18 @@ public class AdminController {
         for (String roles : role) {
             roleSet.add(userService.getRoleById(Long.parseLong(roles)));
         }
-        userEdit.setRoles(roleSet);
-        userEdit.setId(id);
-        userEdit.setFirstname(firstname);
-        userEdit.setLastname(lastname);
-        userEdit.setPassword(password);
-        userEdit.setAge(age);
-        userEdit.setEmail(email);
-        if (userEdit.getId() == null) {
-            userEdit.setPassword(passwordEncoder().encode(userEdit.getPassword()));
-            userService.saveUser(userEdit);
+        user.setRoles(roleSet);
+        user.setId(id);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setPassword(password);
+        user.setAge(age);
+        user.setEmail(email);
+        if (user.getId() == null) {
+            user.setPassword(passwordEncoder().encode(user.getPassword()));
+            userService.saveUser(user);
         }
-        userService.saveUser(userEdit);
+        userService.saveUser(user);
         return "redirect:/admin/userList";
     }
 
